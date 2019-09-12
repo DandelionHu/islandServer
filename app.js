@@ -3,14 +3,19 @@ const Koa=require('koa')
 const bodyparser=require('koa-bodyparser')
 //引入文件
 const InitManager=require('./core/init')
+const catchError=require('./middlewares/exception')
 
 const app=new Koa()
+
+//注册bodyparser
+app.use(bodyparser())
+//注册异常中间件
+app.use(catchError)
 
 //初始化
 InitManager.initCore(app)
 
-//注册bodyparser
-app.use(bodyparser())
+
 
 //监听端口
 app.listen(3000)
