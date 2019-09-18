@@ -40,13 +40,13 @@ const findMembers = function (instance, {
 }
 
 
-
+//生成令牌
 const generateToken = function (uid, scope) {
     const secretKey = global.config.security.secretKey
     const expiresIn = global.config.security.expiresIn
     const token = jwt.sign({
-        uid,
-        scope
+        uid,//用户id
+        scope  //用户权限
     }, secretKey, {
         expiresIn: expiresIn
     })

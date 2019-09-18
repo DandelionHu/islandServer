@@ -18,5 +18,7 @@
 16.数据库的读写：悲观锁  乐观锁  事务  脏读  幻读
 17.基于node.js 专业开发web框架  koa  express
 18.koa 精简  需二次开发，定制化能力强
-
+19.关系型数据库 mysql  sql server  oracle  postgressSQL
+20.非关系型数据库  MongoDB(对象 文档型数据库)  Redis(key:value,缓存数据)  
+21.持久存储数据
 **/

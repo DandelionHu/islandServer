@@ -21,8 +21,10 @@ const {HttpException}=require('../core/http-exception')
             ctx.status=error.status
         }**/
 
-        //开发环境 需要在终端查看异常信息   生成环境不需要
-        if(global.config.environment=='dev'){
+        //开发环境 需要在终端查看异常信息 不是HttpException   生产环境不需要
+        const isHttpException=error instanceof HttpException
+        const isDev=global.config.environment=='dev'
+        if(!isHttpException && isDev){
             throw error  //抛出异常，可以在终端查看异常信息
         }
 

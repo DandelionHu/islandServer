@@ -10,7 +10,7 @@ router.post('/v1/:id/classic/test',async(ctx,next)=>{
     const headers=ctx.request.header //获取header里面的参数
     const body=ctx.request.body
     //校验
-    const v=new PositiveIntegerValidator().validate(ctx) //传入ctx 会自动找到id进行校验
+    const v=await new PositiveIntegerValidator().validate(ctx) //传入ctx 会自动找到id进行校验
     const id=v.get('path.id') //lin-validator 提供的获取参数的方法，id转换成数字类型
 
     //面向切面编程
