@@ -1,0 +1,4 @@
+/* pages/index/index.wxss */
+.btn{
+    margin-bottom: 20rpx !important;
+}

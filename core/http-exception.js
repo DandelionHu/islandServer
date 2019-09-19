@@ -7,7 +7,7 @@ class HttpException extends Error{
         this.errorCode=errorCode
     }
 }
-// 400 错误类
+//400 错误类
 class ParameterException extends HttpException{
     constructor(msg='参数错误',errorCode=10000){
         super()
@@ -43,10 +43,20 @@ class AuthFailed extends HttpException{
         this.errorCode=errorCode
     }
 }
+//403 禁止访问
+class Forbbiden extends HttpException{
+    constructor(msg='禁止访问',errorCode=10006){
+        super()
+        this.code=403
+        this.msg=msg
+        this.errorCode=errorCode
+    }
+}
 module.exports={
     HttpException,
     ParameterException,
     Success,
     NotFound,
-    AuthFailed
+    AuthFailed,
+    Forbbiden
 }

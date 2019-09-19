@@ -5,6 +5,7 @@ const { AuthFailed }=require('../../core/http-exception')
 
 
 class User extends Model{
+    //验证账号密码
     static async verifyEmailPassword(email,plainPassword){
         const user=await User.findOne({
             where:{
@@ -21,6 +22,21 @@ class User extends Model{
             throw new AuthFailed('密码不正确')
         }
         return user
+    }
+    //查询openid是否存在
+    static async getUserByOpenid(openid){
+        const user=await User.findOne({
+            where:{
+                openid
+            }
+        })
+        return user
+    }
+    //增加openid
+    static async registerByOpenid(openid){
+        return await User.create({
+            openid
+        })
     }
 }
 User.init({

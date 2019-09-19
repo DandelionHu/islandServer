@@ -1,10 +1,15 @@
 const Router=require('koa-router')
-const router=new Router()
 const {ParameterException}=require('../../../core/http-exception')
 const {PositiveIntegerValidator}=require('../../validators/validator')
+const {Auth}=require('../../../middlewares/auth')
+const {Flow}=require('../../models/flow')
+const {Art}=require('../../models/art')
 
+const router=new Router({
+    prefix:'/v1/classic'  //接口前缀
+})
 //测试接口
-router.post('/v1/:id/classic/test',async(ctx,next)=>{
+router.post('/test',async(ctx,next)=>{
     const path=ctx.param  //获取路径里的参数
     const query=ctx.request.query //获取？号后面的参数
     const headers=ctx.request.header //获取header里面的参数
@@ -33,5 +38,42 @@ router.post('/v1/:id/classic/test',async(ctx,next)=>{
         path:'classic'
     }
 })
+/*
+非公开api
+检测请求是否有token 并且token是合法非过期
+才能真正进入请求，使用中间件的方式统一对token处理 
+**/
+/*
+权限 分角色 有些角色能访问 有些访问不了
+权限分级 scope
+8普通用户 16管理员
+接口传入权限值
+**/
+//测试权限接口
+router.get('/auth',new Auth(7).m,async(ctx,next)=>{
+    ctx.body=ctx.auth.uid    
+})
+
+//获取最新期刊
+router.get('/latest',new Auth().m,async(ctx,next)=>{
+    //flow表找到index最大的值表示最新期刊
+    //对index进行排序，取最后一条记录
+    //正序排序 倒序排序
+    const flow=await Flow.findOne({
+        order:[
+            ['index','DESC']  //取flow表中index 倒序排序  findone取倒序排序中第一个
+        ]
+    })
+    const art_id=flow.art_id
+    const type=flow.type
+    const art=await Art.getData(art_id,type) //查询实体表的字段
+    // art.index=flow.index //取出flow里面的index给art 这种写法不行 art是个类，返回的是他下面dataValues里面的值
+    // art.dataValues.index=flow.index  //直接修改类上面的值 不谨慎
+    art.setDataValue('index',flow.index) //设置dataValues的值
+
+    //为啥koa会序列化dataValues的值呢？ sequelize模型告诉koa要序列化dataValues
+    //序列化
+    ctx.body=art
+}) 
 
 module.exports=router

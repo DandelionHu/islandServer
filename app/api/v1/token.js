@@ -1,9 +1,10 @@
 const Router=require('koa-router')
-const {TokenValidator}=require('../../validators/validator')
+const {TokenValidator,ParameterException,NotEmptyValidator}=require('../../validators/validator')
 const {LoginType}=require('../../lib/enum')
 const {User}=require('../../models/user')
-const {ParameterException}=require('../../validators/validator')
 const {generateToken}=require('../../../core/util')
+const {Auth}=require('../../../middlewares/auth')
+const {WXManager}=require('../../services/wx')
 const router=new Router({
     prefix:'/v1/token'  //接口前缀
 })
@@ -11,10 +12,18 @@ const router=new Router({
 session token 
 登录 账号 密码 返回 token jwt令牌可携带数据
 令牌的获取 颁布令牌
+api权限 公开api  不公开api
+token 过期 不合法
 **/
-
+/*
+业务逻辑
+1.写到api中
+2.写到model中
+3.service 中
+**/
+//登录
 router.post('/',async(ctx,next)=>{
-    const v=await new TokenValidator().validate(ctx)
+    const v=await new TokenValidator().validate(ctx) 
     const type=parseInt(v.get('body.type'))
     const account=v.get('body.account')
     const secret=v.get('body.secret')
@@ -22,6 +31,7 @@ router.post('/',async(ctx,next)=>{
     switch (type) {
         case LoginType.USER_MINI_PROGRAM:
             //处理小程序登录
+            token=await WXManager.codeToToken(account)
             break;
         case LoginType.USER_EMAIL:
             //处理email用户登录方式
@@ -41,14 +51,22 @@ router.post('/',async(ctx,next)=>{
         token
     }
 }) 
+//校验token接口
+router.post('/verify',async(ctx,next)=>{
+    const v=await new NotEmptyValidator().validate(ctx)
+    const result=Auth.verifyToken(v.get('body.token'))
+    ctx.body={
+        result
+    }
+})
 //邮箱登录验证 获取token
 async function emailLogin(account,secret){
     //比对用户输入的账号和密码是否和数据库的账号密码一致
     const user=await User.verifyEmailPassword(account,secret)
     if(user){
-        const token=generateToken(user.id,2) //生成token
+        const token=generateToken(user.id,Auth.USER) //生成token
         return token
     }
 }
-
+//小程序登录 
 module.exports=router

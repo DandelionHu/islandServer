@@ -11,12 +11,17 @@ const sequelizeDB=new Sequelize(dbName,user,password,{
         //creat_time  update_time 
         timestamps:true,
         //删除字段是否显示 delete_time
-        paranoid:true  
+        paranoid:true,
+        createdAt:'created_at',//重命名创建时间
+        updatedAt:'updated_at',//重命名更新时间
+        deletedAt:'deleted_at',//重命名删除时间
+        underscored:true,
+        freezeTableName:true
     }
 })
 
 sequelizeDB.sync({
-    force:true    //每次数据库都清空
+    // force:true    //每次数据库都清空
 })
 
 module.exports={

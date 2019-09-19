@@ -1,0 +1,4 @@
+<!--pages/index/index.wxml-->
+<l-button size="long" l-class="btn" bind:lintap="onGetToken">获取token</l-button>
+<l-button size="long" l-class="btn" bind:lintap="onVerifyToken">验证token</l-button>
+<l-button size="long" type="warning" l-class="btn" bind:lintap="onGetLatest">获取最新期刊</l-button>

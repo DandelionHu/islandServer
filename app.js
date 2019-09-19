@@ -6,6 +6,8 @@ const InitManager=require('./core/init')
 const catchError=require('./middlewares/exception')
 
 // require('./app/models/user')
+// require('./app/models/classic')
+// require('./app/models/flow')
 
 const app=new Koa()
 
