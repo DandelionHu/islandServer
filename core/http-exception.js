@@ -52,11 +52,42 @@ class Forbbiden extends HttpException{
         this.errorCode=errorCode
     }
 }
+//400 已经点赞
+class LikeError extends HttpException{
+    constructor(msg='您已经点赞过',errorCode=60001){
+        super()
+        this.code=400
+        this.msg=msg
+        this.errorCode=errorCode
+    }
+}
+//400 已经取消点赞
+class DislikeError extends HttpException{
+    constructor(msg='你已取消点赞',errorCode=60002){
+        super()
+        this.code=400
+        this.msg=msg
+        this.errorCode=errorCode
+    }
+}
+//400 没有下一期期刊了 没有上一期期刊了 没有期刊了
+class LatestError extends HttpException{
+    constructor(msg='没有期刊了',errorCode=60003){
+        super()
+        this.code=400
+        this.msg=msg
+        this.errorCode=errorCode
+    }
+}
+
 module.exports={
     HttpException,
     ParameterException,
     Success,
     NotFound,
     AuthFailed,
-    Forbbiden
+    Forbbiden,
+    LikeError,
+    DislikeError,
+    LatestError
 }

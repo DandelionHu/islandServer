@@ -1,7 +1,7 @@
 const Router=require('koa-router')
 const {Success}=require('../../../core/http-exception')
-const {RegisterValidator}=require('../../validators/validator')
-const {User}=require('../../models/user')
+const {RegisterValidator}=require('@validators/validator')
+const {User}=require('@models/user')
 const router=new Router({
     prefix:'/v1/user'  //接口前缀
 })
@@ -17,13 +17,12 @@ router.post('/register',async(ctx,next)=>{
     2.校验 LinValidator
     **/
    const v=await new RegisterValidator().validate(ctx)  //验证器里面有异步操作
-   //数据库操作
-   const user={
-        email:v.get('body.email'),
-        password:v.get('body.password2'),
-        nickname:v.get('body.nickname')
-   }
-   await User.create(user)  //操作数据库是异步的
+
+   const email=v.get('body.email')
+   const password=v.get('body.password2')
+   const nickname=v.get('body.nickname')
+   //注册用户
+   await User.registerByEmail(email,password,nickname)
    //抛出成功消息
    throw new Success()
 }) 

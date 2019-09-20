@@ -70,7 +70,7 @@ Page({
       success: (res)=>{
         if(res.code){
           wx.request({
-            url: 'http://localhost:3000/v1/token',
+            url: 'http://localhost:3000/v1/token/login',
             data: {
               account:res.code,
               type:100
@@ -114,6 +114,54 @@ Page({
       },
     })
   },
+  onGetLatestPrevioust(){
+    wx.request({
+      url: 'http://localhost:3000/v1/classic/5/previous',
+      method: 'GET', 
+      header:{
+        Authorization:_this._encode()
+      },
+      success: (res)=>{
+        console.log(res.data)
+      },
+    })
+  },
+  onGetLatestNext(){
+    wx.request({
+      url: 'http://localhost:3000/v1/classic/8/next',
+      method: 'GET', 
+      header:{
+        Authorization:_this._encode()
+      },
+      success: (res)=>{
+        console.log(res.data)
+      },
+    })
+  },
+  onGetLatestDetail(){
+    wx.request({
+      url: 'http://localhost:3000/v1/classic/4/200',
+      method: 'GET', 
+      header:{
+        Authorization:_this._encode()
+      },
+      success: (res)=>{
+        console.log(res.data)
+      },
+    })
+  },
+  onGetLatestFavor(){
+    wx.request({
+      url: 'http://localhost:3000/v1/classic/100/1/favor',
+      method: 'GET', 
+      header:{
+        Authorization:_this._encode()
+      },
+      success: (res)=>{
+        console.log(res.data)
+      },
+    })
+  },
   _encode(){
     //basic auth 传输令牌需要加密
     //account:password 模式加密
@@ -121,5 +169,39 @@ Page({
     const token = wx.getStorageSync('token')
     const base64=Base64.encode(token+':')
     return 'Basic '+base64
+  },
+  onlike(){
+    console.log("onlike触发")
+    wx.request({
+      url: 'http://localhost:3000/v1/like/add',
+      method: 'POSt', 
+      header:{
+        Authorization:_this._encode()
+      },
+      data:{
+        art_id:1,
+        type:100
+      },
+      success: (res)=>{
+        console.log(res.data)
+      },
+    })
+  },
+  onLikeCancel(){
+    console.log("onLikeCancel触发")
+    wx.request({
+      url: 'http://localhost:3000/v1/like/cancel',
+      method: 'POSt', 
+      header:{
+        Authorization:_this._encode()
+      },
+      data:{
+        art_id:1,
+        type:100
+      },
+      success: (res)=>{
+        console.log(res.data)
+      },
+    })
   }
 })

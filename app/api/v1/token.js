@@ -1,7 +1,7 @@
 const Router=require('koa-router')
-const {TokenValidator,ParameterException,NotEmptyValidator}=require('../../validators/validator')
+const {TokenValidator,ParameterException,NotEmptyValidator}=require('@validators/validator')
 const {LoginType}=require('../../lib/enum')
-const {User}=require('../../models/user')
+const {User}=require('@models/user')
 const {generateToken}=require('../../../core/util')
 const {Auth}=require('../../../middlewares/auth')
 const {WXManager}=require('../../services/wx')
@@ -22,9 +22,9 @@ token 过期 不合法
 3.service 中
 **/
 //登录
-router.post('/',async(ctx,next)=>{
+router.post('/login',async(ctx,next)=>{
     const v=await new TokenValidator().validate(ctx) 
-    const type=parseInt(v.get('body.type'))
+    const type=v.get('body.type')
     const account=v.get('body.account')
     const secret=v.get('body.secret')
     let token;
@@ -56,7 +56,7 @@ router.post('/verify',async(ctx,next)=>{
     const v=await new NotEmptyValidator().validate(ctx)
     const result=Auth.verifyToken(v.get('body.token'))
     ctx.body={
-        result
+        is_valid:result
     }
 })
 //邮箱登录验证 获取token

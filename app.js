@@ -1,3 +1,4 @@
+require('module-alias/register')  //使用别名必须要加
 //引入包
 const Koa=require('koa')
 const bodyparser=require('koa-bodyparser')

@@ -16,7 +16,14 @@ const sequelizeDB=new Sequelize(dbName,user,password,{
         updatedAt:'updated_at',//重命名更新时间
         deletedAt:'deleted_at',//重命名删除时间
         underscored:true,
-        freezeTableName:true
+        freezeTableName:true,
+        scopes:{
+            bh:{
+                attributes:{
+                    exclude:['created_at','updated_at','deleted_at'] //查询时不返回这些字段
+                }
+            }
+        }
     }
 })
 

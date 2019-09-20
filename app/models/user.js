@@ -38,6 +38,15 @@ class User extends Model{
             openid
         })
     }
+    //增加账号密码
+    static async registerByEmail(email,password,nickname){
+        //数据库操作
+        await User.create({
+            email,
+            password,
+            nickname
+        })  //操作数据库是异步的
+    }
 }
 User.init({
     //主键 ：不能重复 不能为空 

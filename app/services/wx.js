@@ -1,7 +1,7 @@
 const axios=require('axios')
 const util=require('util') //node.js帮助包
 const {AuthFailed}=require('../../core/http-exception')
-const {User}=require('../models/user')
+const {User}=require('@models/user')
 const {generateToken}=require('../../core/util')
 const {Auth}=require('../../middlewares/auth')
 class WXManager{

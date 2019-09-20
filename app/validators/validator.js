@@ -1,6 +1,6 @@
 const {LinValidator,Rule}=require('../../core/lin-validator-v2')
-const {User}=require('../models/user')
-const {LoginType}=require('../lib/enum')
+const {User}=require('@models/user')
+const {LoginType,ArtType}=require('../lib/enum')
 
 //校验正整数
 class PositiveIntegerValidator extends LinValidator{
@@ -79,15 +79,20 @@ class TokenValidator extends LinValidator{
                 max:128
             })
         ]
+        this.validateType=checkType
     }
-    validateLoginType(vals){
-        if(!vals.body.type){
-            throw new Error('type是必传参数')
-        }
-        const isType=LoginType.isThisType(vals.body.type)
-        if(!isType){
-            throw new Error('type参数不合法')
-        }
+}
+//登录type校验
+function checkType(vals){
+    let type=vals.body.type
+    if(!type){
+        throw new Error('type是必传参数')
+    }
+    type=parseInt(type)
+    this.parsed.body.type=type
+    const isType=LoginType.isThisType(type)
+    if(!isType){
+        throw new Error('type参数不合法')
     }
 }
 //校验token不为空
@@ -101,9 +106,40 @@ class NotEmptyValidator extends LinValidator{
         ]
     }
 }
+
+//校验点赞
+class LikeValidator extends PositiveIntegerValidator{
+    constructor(){
+        super()
+        this.validateType=checkType
+    }
+}
+//classic type校验
+function checkTypePath(vals){
+    let type=vals.path.type
+    if(!type){
+        throw new Error('type是必传参数')
+    }
+    type=parseInt(type)
+    this.parsed.path.type=type
+    const isType=ArtType.isThisType(type)
+    if(!isType){
+        throw new Error('type参数不合法')
+    }
+}
+//校验期刊详情
+class classicValidator extends PositiveIntegerValidator{
+    constructor(){
+        super()
+        this.validateType=checkTypePath
+    }
+}
+
 module.exports={
     PositiveIntegerValidator,
     RegisterValidator,
     TokenValidator,
-    NotEmptyValidator
+    NotEmptyValidator,
+    LikeValidator,
+    classicValidator
 }
