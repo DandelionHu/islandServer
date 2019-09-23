@@ -8,3 +8,10 @@
 <l-button size="long" type="warning" l-class="btn" bind:lintap="onGetLatestFavor">获取期刊点赞情况</l-button>
 <l-button size="long" type="error" l-class="btn" bind:lintap="onlike">点赞</l-button>
 <l-button size="long" type="error" l-class="btn" bind:lintap="onLikeCancel">取消点赞</l-button>
+<l-button size="long" type="success" l-class="btn" bind:lintap="onHotBook">获取热门书籍列表</l-button>
+<l-button size="long" type="success" l-class="btn" bind:lintap="onBookDetail">获取书籍详情</l-button>
+<l-button size="long" type="success" l-class="btn" bind:lintap="onBookSearch">搜索书籍</l-button>
+<l-button size="long" type="success" l-class="btn" bind:lintap="onBookLikeNum">获取喜欢书籍的数量</l-button>
+<l-button size="long" type="success" l-class="btn" bind:lintap="onMyBookLike">获取书籍点赞情况</l-button>
+<l-button size="long"  l-class="btn" bind:lintap="onAddComment">新增短评</l-button>
+<l-button size="long"  l-class="btn" bind:lintap="onGetComment">获取短评</l-button>

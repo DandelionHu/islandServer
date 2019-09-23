@@ -54,7 +54,6 @@ router.post('/test',async(ctx,next)=>{
 router.get('/auth',new Auth(7).m,async(ctx,next)=>{
     ctx.body=ctx.auth.uid    
 })
-
 //获取最新期刊
 router.get('/latest',new Auth().m,async(ctx,next)=>{
     //获取最新期刊模型

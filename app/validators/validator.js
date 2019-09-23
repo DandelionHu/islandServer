@@ -106,12 +106,24 @@ class NotEmptyValidator extends LinValidator{
         ]
     }
 }
-
+//classic type校验
+function checkTypeBody(vals){
+    let type=vals.body.type
+    if(!type){
+        throw new Error('type是必传参数')
+    }
+    type=parseInt(type)
+    this.parsed.body.type=type
+    const isType=ArtType.isThisType(type)
+    if(!isType){
+        throw new Error('type参数不合法')
+    }
+}
 //校验点赞
 class LikeValidator extends PositiveIntegerValidator{
     constructor(){
         super()
-        this.validateType=checkType
+        this.validateType=checkTypeBody
     }
 }
 //classic type校验
@@ -134,12 +146,51 @@ class classicValidator extends PositiveIntegerValidator{
         this.validateType=checkTypePath
     }
 }
-
+//搜索校验
+class SearchValidator extends LinValidator{
+    constructor(){
+        super()
+        this.q=[
+            new Rule('isLength','搜索关键词不能为空',{
+                min:1,
+                max:16
+            })
+        ]
+        this.start=[
+            new Rule('isInt','不符合规范',{
+                min:0,
+                max:60000
+            }),
+            new Rule('isOptional','',0) //可以不传 默认取0
+        ]
+        this.count=[
+            new Rule('isInt','不符合规范',{
+                min:1,
+                max:20
+            }),
+            new Rule('isOptional','',20)//可以不传 默认取20
+        ]
+    }
+}
+//短评
+class AddShortCommentValidator extends PositiveIntegerValidator{
+    constructor(){
+        super()
+        this.content=[
+            new Rule('isLength','必须在1到12个字符之间',{
+                min:1,
+                max:12
+            })
+        ]
+    }
+}
 module.exports={
     PositiveIntegerValidator,
     RegisterValidator,
     TokenValidator,
     NotEmptyValidator,
     LikeValidator,
-    classicValidator
+    classicValidator,
+    SearchValidator,
+    AddShortCommentValidator
 }

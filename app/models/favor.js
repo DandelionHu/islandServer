@@ -87,7 +87,7 @@ class Favor extends Model{
         const fovers=await Favor.findAll({
             where:{
                 uid,
-                type:{ //type 不等于400
+                type:{ //type 不等于400  [-1]:100 所有key都是字符串
                     [Op.not]:400
                 }
             }
@@ -98,6 +98,29 @@ class Favor extends Model{
         //循环查询数据库 查询次数不可控 非常危险要避免
         return await Art.getList(fovers)
     }
+    //查询具体书籍点赞情况 用户是否点赞
+    static async getBookFavor(uid,bookId){
+        //获取书籍点赞数量
+        const favorNums=await Favor.count({
+            where:{
+                art_id:bookId,
+                type:400
+            }
+        })
+        //获取用户是否点赞
+        const myFavor=await Favor.findOne({
+            where:{
+                uid,
+                art_id:bookId,
+                type:400
+            }
+        })
+        return {
+            fav_nums:favorNums,
+            like_status:myFavor?true:false //有数据返回true
+        }
+    }
+
 }
 Favor.init({
     uid:Sequelize.INTEGER,

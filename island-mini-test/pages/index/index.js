@@ -191,7 +191,7 @@ Page({
     console.log("onLikeCancel触发")
     wx.request({
       url: 'http://localhost:3000/v1/like/cancel',
-      method: 'POSt', 
+      method: 'POST', 
       header:{
         Authorization:_this._encode()
       },
@@ -203,5 +203,96 @@ Page({
         console.log(res.data)
       },
     })
-  }
+  },
+  onHotBook(){
+    wx.request({
+      url: 'http://localhost:3000/v1/book/latest',
+      method: 'GET', 
+      header:{
+        Authorization:_this._encode()
+      },
+      success: (res)=>{
+        console.log(res.data)
+      },
+    })
+  },
+  onBookDetail(){
+    wx.request({
+      url: 'http://localhost:3000/v1/book/7/detail',
+      method: 'GET',  
+      header:{
+        Authorization:_this._encode()
+      },
+      success: (res)=>{
+        console.log(res.data)
+      },
+    })
+  },
+  onBookSearch(){
+    wx.request({
+      url: 'http://localhost:3000/v1/book/search',
+      method: 'GET',  
+      data:{
+        q:'东野圭吾'
+      },
+      header:{
+        Authorization:_this._encode()
+      },
+      success: (res)=>{
+        console.log(res.data)
+      },
+    })
+  },
+  onBookLikeNum(){
+    wx.request({
+      url: 'http://localhost:3000/v1/book/favor/count',
+      method: 'GET',  
+      header:{
+        Authorization:_this._encode()
+      },
+      success: (res)=>{
+        console.log(res.data)
+      },
+    })
+  },
+  onMyBookLike(){
+    wx.request({
+      url: 'http://localhost:3000/v1/book/7/favor',
+      method: 'GET',  
+      header:{
+        Authorization:_this._encode()
+      },
+      success: (res)=>{
+        console.log(res.data)
+      },
+    })
+  },
+  onAddComment(){
+    wx.request({
+      url: 'http://localhost:3000/v1/book/add/short_comment',
+      method: 'POST',  
+      header:{
+        Authorization:_this._encode()
+      },
+      data:{
+        book_id:7,
+        content:'你真好看'
+      },
+      success: (res)=>{
+        console.log(res.data)
+      },
+    })
+  },
+  onGetComment(){
+    wx.request({
+      url: 'http://localhost:3000/v1/book/7/short_comment',
+      method: 'GET',  
+      header:{
+        Authorization:_this._encode()
+      },
+      success: (res)=>{
+        console.log(res.data)
+      },
+    })
+  },
 })
