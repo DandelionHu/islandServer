@@ -3,6 +3,10 @@ const { sequelizeDB }=require('../../core/db')
 
 
 class Comment extends Model{
+    // 不能加constructor  openlayer
+    // constructor(){
+    //     super()
+    // }
     //添加短评
     static async addComment(bookId,content){
         //短评加1  相同content 加1
@@ -35,6 +39,13 @@ class Comment extends Model{
         })
         return comments
     }
+    //json序列化返回值
+    // toJSON(){
+    //     return{
+    //         content:this.getDataValue('content'),
+    //         nums:this.getDataValue('nums')
+    //     }
+    // }
 }
 Comment.init({
     book_id:Sequelize.INTEGER,
@@ -47,6 +58,8 @@ Comment.init({
     sequelize:sequelizeDB,
     tableName:'comment'  //表名
 })
+//要删除的字段 不推荐
+// Comment.prototype.exclude=['id'] 
 
 module.exports={
     Comment

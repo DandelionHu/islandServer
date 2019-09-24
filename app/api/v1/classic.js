@@ -76,12 +76,12 @@ router.get('/latest',new Auth().m,async(ctx,next)=>{
 //获取当前一期的下一期
 router.get('/:index/next',new Auth().m,async(ctx,next)=>{
     const v=await new PositiveIntegerValidator().validate(ctx,{id:'index'})
-    const index=v.get('path.index')-1
+    const index=parseInt(v.get('path.index')+1)
     const uid=ctx.auth.uid
-    //获取下一期期刊 减一之后查询期号对应的art_id,type 通过art_id 和 type 获取实体类
+    //获取上一期期刊 加一之后查询期号对应的art_id,type 通过art_id 和 type 获取实体类
     const flow=await Flow.getLatestNextOrPrev(index)
     if(!flow){
-        //没查到 没有下一期期刊了
+        //没查到 没有上一期期刊了
         throw new LatestError('没有下一期期刊了')
     }
     const art_id=flow.art_id
@@ -96,12 +96,12 @@ router.get('/:index/next',new Auth().m,async(ctx,next)=>{
 //获取当前一期的上一期
 router.get('/:index/previous',new Auth().m,async(ctx,next)=>{
     const v=await new PositiveIntegerValidator().validate(ctx,{id:'index'})
-    const index=parseInt(v.get('path.index')+1)
+    const index=v.get('path.index')-1
     const uid=ctx.auth.uid
-    //获取上一期期刊 加一之后查询期号对应的art_id,type 通过art_id 和 type 获取实体类
+    //获取下一期期刊 减一之后查询期号对应的art_id,type 通过art_id 和 type 获取实体类
     const flow=await Flow.getLatestNextOrPrev(index)
     if(!flow){
-        //没查到 没有上一期期刊了
+        //没查到 没有下一期期刊了
         throw new LatestError('没有上一期期刊了')
     }
     const art_id=flow.art_id
@@ -111,6 +111,7 @@ router.get('/:index/previous',new Auth().m,async(ctx,next)=>{
     //查询用户是否点赞
     const likeLatest=await Favor.userLikeIt(art_id,type,uid)
     art.setDataValue('like_status',likeLatest)
+    // art.exclude=['like_status']
     ctx.body=art
 })
 //获取某一期期刊详情

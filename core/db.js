@@ -1,4 +1,5 @@
-const Sequelize=require('sequelize')
+const {Sequelize,Model}=require('sequelize')
+const {unset,clone,isArray}=require('lodash')
 const {dbName,host,port,user,password}=require('../config/config').datebase
 //数据库连接初始化
 const sequelizeDB=new Sequelize(dbName,user,password,{
@@ -30,6 +31,36 @@ const sequelizeDB=new Sequelize(dbName,user,password,{
 sequelizeDB.sync({
     // force:true    //每次数据库都清空
 })
+// 序列化时不返回时间字段
+Model.prototype.toJSON=function(){
+    //浅拷贝
+    let data=clone(this.dataValues) //dataValues 里面的值不受get影响
+
+    unset(data,'updated_at')
+    unset(data,'created_at')
+    unset(data,'deleted_at')
+
+    // exclude 模型上要删除的字段 
+    //是个数组，遍历删除
+    if(isArray(this.exclude)){
+        //判断数组
+        this.exclude.forEach((value)=>{
+            unset(data,value)
+        })
+    }
+
+    for(key in data){
+        //判断是不是image
+        if(key==='image'){
+            //判断image路径是不是http开头
+            if(!data[key].startsWith('http'))
+                data[key]=global.config.host+data[key]
+        }
+    }
+
+    return data
+}
+ 
 
 module.exports={
     sequelizeDB

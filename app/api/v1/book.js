@@ -12,15 +12,13 @@ const {HotBook}=require('@models/hot-book')
 //获取热门书籍 点赞数 是否喜欢
 router.get('/hot_list',async(ctx,next)=>{
     const hotBook=await HotBook.getAll()
-    ctx.body={
-        books:hotBook
-    }
+    ctx.body=hotBook
 })
 //获取书籍详情信息
 router.get('/:id/detail',async(ctx,next)=>{
     const v=await new PositiveIntegerValidator().validate(ctx)
     const id=v.get('path.id')
-    const detail= await new Book(id).getDatail()
+    const detail= await new Book().getDatail(id)
     ctx.body=detail
 })
 //搜索书籍
@@ -67,7 +65,10 @@ router.get('/:book_id/short_comment',new Auth().m,async(ctx,next)=>{
     })
     const bookId=v.get('path.book_id')
     const comments=await Comment.getComments(bookId)
-    ctx.body=comments
+    ctx.body={
+        comments,
+        book_id:bookId
+    }
 })
 //热搜关键字
 router.get('/hot_keyword',async(ctx,next)=>{

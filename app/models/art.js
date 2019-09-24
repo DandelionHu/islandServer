@@ -1,5 +1,7 @@
 const { Op}=require('sequelize')
 const {Movie,Music,Sentence}=require('./classic')
+const {flatten}=require('lodash')
+
 class Art{
     //查询movie music sentence表里面的具体数据
     static async getData(art_id,type,useScope=true){
@@ -25,7 +27,14 @@ class Art{
                 break;
             case 400:
                 //书籍 表
-
+                const {Book}=require('./book') //循环导入
+                art= await Book.scope(scope).findOne(finder)
+                if(!art){
+                    // 没查到
+                    art=await Book.create({
+                        id:art_id
+                    })
+                }
                 break;
             default:
                 break;
@@ -55,10 +64,10 @@ class Art{
                 continue
             }
             const arts=await Art._getListByType(ids,parseInt(key)) //转化可以为int
-            artsArr=artsArr.concat(arts) //拼接数组
+            artsArr.push(arts) //拼接数组
         }
         //二维数组 展开 flatten  lodash里面的方法
-        return artsArr
+        return flatten(artsArr)
     }
     static async _getListByType(ids,type){
         //in 查询

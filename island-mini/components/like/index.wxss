@@ -1,0 +1,25 @@
+/* components/like/index.wxss */
+
+.container{
+    display:inline-flex;
+    flex-direction: row;
+    padding: 10rpx;
+    width:90rpx;
+}
+
+.container image{
+   width:32rpx;
+   height:28rpx;
+
+}
+
+.container text{
+    /* 苹方  思源 */
+    /* font-family: "PingFangSC-Thin"; */
+    font-size:24rpx;
+    line-height: 24rpx;
+    color: #bbbbbb;
+    position: relative;
+    bottom: 10rpx;
+    left: 6rpx;
+}

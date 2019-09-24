@@ -10,13 +10,9 @@ book 业务表 记录书籍点赞情况
 爬虫 必备工具 数据处理和分析 python
 **/
 class Book extends Model{
-    constructor(id){
-        super()
-        this.id=id
-    }
     //获取书籍详情
-    async getDatail(){
-        const url=util.format(global.config.yushu.detailUrl,this.id)
+    async getDatail(id){
+        const url=util.format(global.config.yushu.detailUrl,id)
         const detail=await axios.get(url)
         return detail.data
     }
